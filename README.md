@@ -379,14 +379,13 @@ python visualization/server.py
 ## Documentation
 
 - [Ontology Documentation](ontology/ontology_documentation.md) - Ontology design decisions
-- [Complete Project Explanation](docs/leuphena_kg_complete_explanation.md) - Full technical documentation
-- [Evaluation Report](docs/evaluation_template.md) - Evaluation metrics and results
-
+- 
 ## License
 
 Academic use - Bachelor's Thesis Project
 
-## Author
+## Author: Nadeem Hakimi
 
 Bachelor's Thesis Project - Leuphana University of Lüneburg
-Supervisor: Debayan Banerjee
+
+Supervisor: Dr.Debayan Banerjee
