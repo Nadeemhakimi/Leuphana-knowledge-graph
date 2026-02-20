@@ -379,7 +379,8 @@ python visualization/server.py
 ## Documentation
 
 - [Ontology Documentation](ontology/ontology_documentation.md) - Ontology design decisions
-- 
+- evaluation_template.pdf
+
 ## License
 
 Academic use - Bachelor's Thesis Project
