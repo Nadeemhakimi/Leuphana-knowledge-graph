@@ -1,0 +1,381 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix leuph: <http://leuphana.de/ontology#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# =============================================================================
+# SHACL Shapes for Leuphana Knowledge Graph Validation
+# =============================================================================
+# These shapes define constraints that instances in the KG should satisfy.
+# Use with a SHACL validator or Neo4j's n10s.validation procedures.
+# =============================================================================
+
+
+# -----------------------------------------------------------------------------
+# Person Shape - Validates all Person entities
+# -----------------------------------------------------------------------------
+
+leuph:PersonShape
+    a sh:NodeShape ;
+    sh:targetClass foaf:Person ;
+    sh:name "Person Shape" ;
+    sh:description "Validates Person entities in the knowledge graph" ;
+    
+    # Required: must have a name
+    sh:property [
+        sh:path leuph:name ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:minLength 2 ;
+        sh:message "Every person must have exactly one name (at least 2 characters)" ;
+        sh:severity sh:Violation ;
+    ] ;
+    
+    # Optional but recommended: email
+    sh:property [
+        sh:path leuph:email ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" ;
+        sh:message "Email must be a valid email address format" ;
+        sh:severity sh:Warning ;
+    ] ;
+    
+    # Optional: phone number
+    sh:property [
+        sh:path leuph:phone ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Phone number should be a string" ;
+        sh:severity sh:Info ;
+    ] ;
+    
+    # Optional: office location
+    sh:property [
+        sh:path leuph:office ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Office should be a string" ;
+        sh:severity sh:Info ;
+    ] ;
+    
+    # Optional: webpage must be valid URI
+    sh:property [
+        sh:path leuph:webpage ;
+        sh:maxCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Webpage must be a valid IRI" ;
+        sh:severity sh:Warning ;
+    ] .
+
+
+# -----------------------------------------------------------------------------
+# Professor Shape - Additional constraints for Professors
+# -----------------------------------------------------------------------------
+
+leuph:ProfessorShape
+    a sh:NodeShape ;
+    sh:targetClass leuph:Professor ;
+    sh:name "Professor Shape" ;
+    sh:description "Validates Professor entities" ;
+    
+    # Professors should have email (stronger recommendation)
+    sh:property [
+        sh:path leuph:email ;
+        sh:minCount 1 ;
+        sh:message "Professors should have an email address" ;
+        sh:severity sh:Warning ;
+    ] ;
+    
+    # Professors should have a title
+    sh:property [
+        sh:path leuph:title ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Professors should have an academic title" ;
+        sh:severity sh:Warning ;
+    ] ;
+    
+    # Professors should be affiliated with an organization
+    sh:property [
+        sh:path leuph:worksAt ;
+        sh:minCount 1 ;
+        sh:message "Professors should be affiliated with at least one organization" ;
+        sh:severity sh:Warning ;
+    ] .
+
+
+# -----------------------------------------------------------------------------
+# Organization Shape - Validates all Organizations
+# -----------------------------------------------------------------------------
+
+leuph:OrganizationShape
+    a sh:NodeShape ;
+    sh:targetClass foaf:Organization ;
+    sh:name "Organization Shape" ;
+    sh:description "Validates Organization entities" ;
+    
+    # Required: must have a name
+    sh:property [
+        sh:path leuph:name ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:minLength 2 ;
+        sh:message "Every organization must have exactly one name" ;
+        sh:severity sh:Violation ;
+    ] ;
+    
+    # Optional: webpage
+    sh:property [
+        sh:path leuph:webpage ;
+        sh:maxCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Webpage must be a valid IRI" ;
+        sh:severity sh:Info ;
+    ] .
+
+
+# -----------------------------------------------------------------------------
+# School Shape - Validates School entities
+# -----------------------------------------------------------------------------
+
+leuph:SchoolShape
+    a sh:NodeShape ;
+    sh:targetClass leuph:School ;
+    sh:name "School Shape" ;
+    sh:description "Validates School (Faculty) entities" ;
+    
+    # Schools must be part of the university
+    sh:property [
+        sh:path leuph:partOf ;
+        sh:minCount 1 ;
+        sh:class leuph:University ;
+        sh:message "Schools must be part of the University" ;
+        sh:severity sh:Violation ;
+    ] ;
+    
+    # Schools should have a description
+    sh:property [
+        sh:path leuph:description ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Schools should have a description" ;
+        sh:severity sh:Warning ;
+    ] ;
+    
+    # Schools should have a webpage
+    sh:property [
+        sh:path leuph:webpage ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "Schools should have a webpage" ;
+        sh:severity sh:Warning ;
+    ] .
+
+
+# -----------------------------------------------------------------------------
+# Institute Shape - Validates Institute entities
+# -----------------------------------------------------------------------------
+
+leuph:InstituteShape
+    a sh:NodeShape ;
+    sh:targetClass leuph:Institute ;
+    sh:name "Institute Shape" ;
+    sh:description "Validates Institute entities" ;
+    
+    # Institutes must belong to a school
+    sh:property [
+        sh:path leuph:belongsTo ;
+        sh:minCount 1 ;
+        sh:class leuph:School ;
+        sh:message "Institutes must belong to a School" ;
+        sh:severity sh:Violation ;
+    ] ;
+    
+    # Institutes should have an abbreviation
+    sh:property [
+        sh:path leuph:abbreviation ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:maxLength 10 ;
+        sh:message "Institute abbreviation should be short (max 10 chars)" ;
+        sh:severity sh:Info ;
+    ] .
+
+
+# -----------------------------------------------------------------------------
+# Study Program Shape - Validates Study Programs
+# -----------------------------------------------------------------------------
+
+leuph:StudyProgramShape
+    a sh:NodeShape ;
+    sh:targetClass leuph:StudyProgram ;
+    sh:name "Study Program Shape" ;
+    sh:description "Validates Study Program entities" ;
+    
+    # Must have a name
+    sh:property [
+        sh:path leuph:name ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Programs must have a name" ;
+        sh:severity sh:Violation ;
+    ] ;
+    
+    # Should be offered by an organization
+    sh:property [
+        sh:path leuph:offeredBy ;
+        sh:minCount 1 ;
+        sh:class foaf:Organization ;
+        sh:message "Programs should be offered by an organization" ;
+        sh:severity sh:Warning ;
+    ] ;
+    
+    # Should have duration specified
+    sh:property [
+        sh:path leuph:duration ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Programs should specify duration" ;
+        sh:severity sh:Info ;
+    ] ;
+    
+    # Should have language specified
+    sh:property [
+        sh:path leuph:language ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Programs should specify language of instruction" ;
+        sh:severity sh:Info ;
+    ] .
+
+
+# -----------------------------------------------------------------------------
+# Course Shape - Validates Course entities
+# -----------------------------------------------------------------------------
+
+leuph:CourseShape
+    a sh:NodeShape ;
+    sh:targetClass leuph:Course ;
+    sh:name "Course Shape" ;
+    sh:description "Validates Course entities" ;
+    
+    # Must have a name
+    sh:property [
+        sh:path leuph:name ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Courses must have a name" ;
+        sh:severity sh:Violation ;
+    ] ;
+    
+    # Credits should be positive integer
+    sh:property [
+        sh:path leuph:credits ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 30 ;
+        sh:message "ECTS credits should be between 1 and 30" ;
+        sh:severity sh:Warning ;
+    ] ;
+    
+    # Should be taught by someone
+    sh:property [
+        sh:path leuph:taughtBy ;
+        sh:minCount 1 ;
+        sh:class leuph:AcademicStaff ;
+        sh:message "Courses should have at least one instructor" ;
+        sh:severity sh:Warning ;
+    ] .
+
+
+# -----------------------------------------------------------------------------
+# University Shape - Validates the University entity
+# -----------------------------------------------------------------------------
+
+leuph:UniversityShape
+    a sh:NodeShape ;
+    sh:targetClass leuph:University ;
+    sh:name "University Shape" ;
+    sh:description "Validates the University entity" ;
+    
+    # Must have name and webpage
+    sh:property [
+        sh:path leuph:name ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "University must have a name" ;
+        sh:severity sh:Violation ;
+    ] ;
+    
+    sh:property [
+        sh:path leuph:webpage ;
+        sh:minCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "University must have a webpage" ;
+        sh:severity sh:Violation ;
+    ] ;
+    
+    sh:property [
+        sh:path leuph:address ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "University should have an address" ;
+        sh:severity sh:Warning ;
+    ] .
+
+
+# -----------------------------------------------------------------------------
+# Relationship Constraints
+# -----------------------------------------------------------------------------
+
+# worksAt must point to an Organization
+leuph:WorksAtConstraint
+    a sh:NodeShape ;
+    sh:targetSubjectsOf leuph:worksAt ;
+    sh:property [
+        sh:path leuph:worksAt ;
+        sh:class foaf:Organization ;
+        sh:message "worksAt must point to an Organization" ;
+        sh:severity sh:Violation ;
+    ] .
+
+# supervises must be from Professor to Person
+leuph:SupervisesConstraint
+    a sh:NodeShape ;
+    sh:targetSubjectsOf leuph:supervises ;
+    sh:class leuph:Professor ;
+    sh:message "Only Professors can supervise" ;
+    sh:severity sh:Violation .
+
+
+# -----------------------------------------------------------------------------
+# Data Quality Constraints
+# -----------------------------------------------------------------------------
+
+# No orphan nodes (warning only)
+leuph:ConnectivityShape
+    a sh:NodeShape ;
+    sh:targetClass foaf:Person, foaf:Organization ;
+    sh:name "Connectivity Check" ;
+    sh:description "Warns about potentially isolated entities" ;
+    sh:sparql [
+        sh:message "Entity appears to be isolated (no relationships)" ;
+        sh:severity sh:Warning ;
+        sh:select """
+            PREFIX leuph: <http://leuphana.de/ontology#>
+            SELECT $this
+            WHERE {
+                $this ?p ?o .
+                FILTER NOT EXISTS { $this ?rel ?other . FILTER(?rel != rdf:type && ?rel != rdfs:label && ?rel != leuph:name) }
+                FILTER NOT EXISTS { ?other ?rel $this . }
+            }
+        """ ;
+    ] .

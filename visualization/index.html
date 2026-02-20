@@ -1,0 +1,1604 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leuphana Knowledge Graph Explorer</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+      /* Custom styles for D3 graph */
+      .node {
+        cursor: pointer;
+      }
+      .node text {
+        font-size: 10px;
+        pointer-events: none;
+      }
+      .node circle {
+        stroke: #fff;
+        stroke-width: 2px;
+        transition: all 0.2s ease;
+      }
+      .node:hover circle {
+        stroke-width: 3px;
+        filter: brightness(1.1);
+      }
+      .node.highlighted circle {
+        stroke: #f97316;
+        stroke-width: 4px;
+      }
+      .node.dimmed {
+        opacity: 0.15;
+      }
+      .link {
+        stroke-opacity: 0.6;
+        stroke-width: 1.5px;
+      }
+      .link.highlighted {
+        stroke-opacity: 1;
+        stroke-width: 3px;
+      }
+      .link.dimmed {
+        opacity: 0.1;
+      }
+      .link-label {
+        font-size: 8px;
+        pointer-events: none;
+        text-anchor: middle;
+        font-weight: 600;
+        paint-order: stroke;
+        stroke: white;
+        stroke-width: 3px;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .link-label.hidden {
+        display: none;
+      }
+      .link-label.dimmed {
+        opacity: 0.1;
+      }
+
+      /* Scrollbar styling */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 3px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+
+      /* Transition for sidebar */
+      .sidebar-transition {
+        transition:
+          transform 0.3s ease,
+          width 0.3s ease;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-100 font-sans antialiased overflow-hidden">
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+      <aside
+        id="sidebar"
+        class="sidebar-transition w-96 bg-white border-r border-slate-200 flex flex-col shadow-lg z-20"
+      >
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h1 class="font-bold text-lg">Knowledge Graph Explorer</h1>
+                <p class="text-blue-200 text-xs">Leuphana University</p>
+              </div>
+            </div>
+            <button
+              onclick="toggleSidebar()"
+              class="p-2 hover:bg-white/10 rounded-lg transition"
+              title="Toggle Sidebar"
+            >
+              <svg
+                id="toggleIcon"
+                class="w-5 h-5 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div id="sidebarContent" class="flex-1 flex flex-col overflow-y-auto custom-scrollbar">
+          <!-- Natural Language Query -->
+          <div class="p-4 border-b border-slate-100">
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
+              Ask a Question
+            </label>
+            <div class="relative">
+              <textarea
+                id="nlqInput"
+                rows="3"
+                class="w-full px-3 py-2 pr-12 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none transition"
+                placeholder="e.g., Which professors work at the Institute for Management?"
+              ></textarea>
+              <button
+                onclick="askQuestion()"
+                id="askBtn"
+                class="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white p-2 rounded-lg transition"
+                title="Ask"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Example Questions -->
+            <div class="mt-2 flex flex-wrap gap-1.5">
+              <button onclick="setQuestion('Which professors work at the School of Sustainability?')"
+                      class="text-xs bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 px-2.5 py-1 rounded-full transition cursor-pointer">
+                Professors by school
+              </button>
+              <button onclick="setQuestion('What master programs are offered?')"
+                      class="text-xs bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 px-2.5 py-1 rounded-full transition cursor-pointer">
+                Master programs
+              </button>
+              <button onclick="setQuestion('Show all HiWi positions')"
+                      class="text-xs bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 px-2.5 py-1 rounded-full transition cursor-pointer">
+                HiWi positions
+              </button>
+              <button onclick="setQuestion('Which institutes belong to which school?')"
+                      class="text-xs bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 px-2.5 py-1 rounded-full transition cursor-pointer">
+                Org hierarchy
+              </button>
+              <button onclick="setQuestion('Who heads which chairs?')"
+                      class="text-xs bg-slate-100 hover:bg-blue-100 text-slate-600 hover:text-blue-700 px-2.5 py-1 rounded-full transition cursor-pointer">
+                Chair leadership
+              </button>
+            </div>
+          </div>
+
+          <!-- Loading State -->
+          <div id="loadingState" class="hidden p-4 border-b border-slate-100">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              <span class="text-sm text-slate-600" id="loadingText">Thinking...</span>
+            </div>
+            <div class="space-y-2">
+              <div class="h-3 bg-slate-200 rounded animate-pulse w-3/4"></div>
+              <div class="h-3 bg-slate-200 rounded animate-pulse w-1/2"></div>
+              <div class="h-3 bg-slate-200 rounded animate-pulse w-5/6"></div>
+            </div>
+          </div>
+
+          <!-- LLM Answer -->
+          <div id="answerSection" class="hidden border-b border-slate-100 p-4 bg-blue-50/50">
+            <div class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <p id="answerText" class="text-sm text-slate-700 leading-relaxed"></p>
+            </div>
+          </div>
+
+          <!-- Generated SPARQL (collapsible) -->
+          <div class="border-b border-slate-100">
+            <button onclick="toggleSparqlPanel()"
+                    class="w-full px-4 py-2.5 flex items-center justify-between text-left hover:bg-slate-50 transition">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                SPARQL Query
+              </span>
+              <svg id="sparqlToggleIcon" class="w-4 h-4 text-slate-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <div id="sparqlPanel" class="hidden px-4 pb-3">
+              <textarea id="queryEditor"
+                        class="w-full h-32 px-3 py-2 text-xs font-mono bg-slate-50 border border-slate-200 rounded-lg resize-none custom-scrollbar focus:ring-2 focus:ring-blue-500 outline-none"
+                        placeholder="SPARQL will appear here after asking a question..."></textarea>
+              <div class="flex gap-2 mt-2">
+                <button onclick="runQuery()"
+                        id="runQueryBtn"
+                        class="text-xs bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-medium py-1.5 px-3 rounded-lg transition">
+                  Run SPARQL
+                </button>
+                <button onclick="copySparql()"
+                        class="text-xs text-slate-500 hover:text-slate-700 font-medium py-1.5 px-3 transition">
+                  Copy
+                </button>
+                <button onclick="clearHighlights()"
+                        class="text-xs text-slate-500 hover:text-slate-700 font-medium py-1.5 px-3 transition ml-auto">
+                  Clear
+                </button>
+              </div>
+              <!-- View Options -->
+              <div class="flex items-center gap-4 mt-2 pt-2 border-t border-slate-200">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="autoZoom" checked class="w-3.5 h-3.5 text-blue-600 rounded focus:ring-blue-500" />
+                  <span class="text-xs text-slate-600">Auto-zoom</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" id="filterMode" class="w-3.5 h-3.5 text-blue-600 rounded focus:ring-blue-500" />
+                  <span class="text-xs text-slate-600">Hide others</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Endpoint Config (compact) -->
+          <div class="px-4 py-2 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <input type="text" id="endpoint" value="/sparql"
+                     class="flex-1 px-2 py-1 text-xs border border-slate-200 rounded focus:ring-1 focus:ring-blue-500 outline-none"
+                     placeholder="SPARQL endpoint" />
+              <div id="connectionStatus" class="flex items-center gap-1">
+                <span class="w-2 h-2 bg-slate-300 rounded-full"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results Section -->
+          <div class="border-t border-slate-200 flex flex-col">
+            <div
+              class="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between"
+            >
+              <div class="flex items-center gap-2">
+                <h3 class="font-semibold text-sm text-slate-700">Results</h3>
+                <span
+                  id="resultsCount"
+                  class="bg-blue-100 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-full"
+                  >0 rows</span
+                >
+              </div>
+              <button
+                onclick="exportResults()"
+                class="text-xs text-slate-500 hover:text-slate-700 transition"
+              >
+                Export CSV
+              </button>
+            </div>
+            <div
+              id="resultsContent"
+              class="flex-1 overflow-auto custom-scrollbar p-3"
+            >
+              <div class="text-center text-slate-400 py-8">
+                <svg
+                  class="w-12 h-12 mx-auto mb-2 opacity-50"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                  />
+                </svg>
+                <p class="text-sm">Ask a question to see results</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Toggle Button (visible when sidebar is collapsed) -->
+      <button
+        id="sidebarToggleBtn"
+        onclick="toggleSidebar()"
+        class="hidden fixed left-0 top-4 z-30 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-r-lg shadow-lg transition"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 5l7 7-7 7M5 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+
+      <!-- Main Graph Area -->
+      <main class="flex-1 relative bg-slate-50">
+        <!-- Graph Container -->
+        <div id="graph" class="w-full h-full"></div>
+
+        <!-- Tooltip -->
+        <div
+          id="tooltip"
+          class="hidden absolute bg-white rounded-xl shadow-2xl border border-slate-200 p-4 max-w-sm z-50 pointer-events-none"
+        >
+          <div id="tooltipContent"></div>
+        </div>
+
+        <!-- Top Controls -->
+        <div class="absolute top-4 left-4 flex gap-2">
+          <div
+            class="bg-white rounded-xl shadow-lg border border-slate-200 p-3"
+          >
+            <div class="flex items-center gap-2">
+              <svg
+                class="w-4 h-4 text-slate-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                type="text"
+                id="graphSearch"
+                placeholder="Search nodes..."
+                class="w-48 text-sm outline-none placeholder-slate-400"
+                oninput="searchNodes(this.value)"
+              />
+            </div>
+          </div>
+          <button
+            onclick="resetZoom()"
+            class="bg-white hover:bg-slate-50 rounded-xl shadow-lg border border-slate-200 p-3 transition"
+            title="Reset zoom"
+          >
+            <svg
+              class="w-4 h-4 text-slate-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Legend -->
+        <div
+          class="absolute top-4 right-4 bg-white rounded-xl shadow-lg border border-slate-200 p-4 max-h-[70vh] overflow-auto custom-scrollbar"
+        >
+          <h3
+            class="font-semibold text-sm text-slate-700 mb-3 flex items-center gap-2"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
+              />
+            </svg>
+            Entity Types
+          </h3>
+          <div id="legendItems" class="space-y-1"></div>
+
+          <!-- Edge Types Legend -->
+          <h3
+            class="font-semibold text-sm text-slate-700 mt-4 mb-3 flex items-center gap-2 pt-3 border-t border-slate-100"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+              />
+            </svg>
+            Relationship Types
+          </h3>
+          <div id="edgeLegendItems" class="space-y-1 text-xs">
+            <!-- Dynamically populated from graph data -->
+          </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div
+          class="absolute bottom-4 left-4 bg-white rounded-xl shadow-lg border border-slate-200 px-4 py-2 flex items-center gap-4"
+        >
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+            <span id="nodeCount" class="text-sm text-slate-600 font-medium"
+              >0 nodes</span
+            >
+          </div>
+          <div class="w-px h-4 bg-slate-200"></div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 bg-slate-400 rounded-full"></span>
+            <span id="edgeCount" class="text-sm text-slate-600 font-medium"
+              >0 edges</span
+            >
+          </div>
+          <div class="w-px h-4 bg-slate-200"></div>
+          <label
+            class="flex items-center gap-2 cursor-pointer select-none"
+            title="Labels appear when zoomed in"
+          >
+            <input
+              type="checkbox"
+              id="showEdgeLabels"
+              onchange="toggleEdgeLabels()"
+              class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+            />
+            <span class="text-sm text-slate-600">Edge labels</span>
+            <span class="text-xs text-slate-400">(zoom in)</span>
+          </label>
+        </div>
+
+        <!-- Mode Indicator -->
+        <div
+          id="modeIndicator"
+          class="absolute bottom-4 right-4 bg-white rounded-xl shadow-lg border border-slate-200 px-4 py-2 flex items-center gap-2"
+        >
+          <span class="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></span>
+          <span class="text-sm text-slate-600">Offline Mode (JSON)</span>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // =================================================================
+      // State
+      // =================================================================
+      let graphData = null;
+      let queryResults = [];
+      let simulation = null;
+      let svg = null;
+      let g = null;
+      let node = null;
+      let link = null;
+      let linkLabel = null;
+      let showEdgeLabels = false;
+      let zoom = null;
+      let sidebarOpen = true;
+      let activeTypes = new Set();
+      let typeColors = {};
+
+      // Edge colors by relationship type
+      const edgeColors = {
+        partOf: "#3b82f6", // blue - organizational hierarchy
+        hasPart: "#3b82f6",
+        belongsTo: "#3b82f6",
+        worksAt: "#10b981", // green - employment
+        memberOf: "#10b981",
+        hasMember: "#10b981",
+        headedBy: "#f59e0b", // amber - leadership
+        heads: "#f59e0b",
+        offeredBy: "#8b5cf6", // purple - programs
+        offers: "#8b5cf6",
+        teaches: "#ec4899", // pink - teaching
+        taughtBy: "#ec4899",
+        postedBy: "#06b6d4", // cyan - job postings
+        supervisedBy: "#ef4444", // red - supervision
+        supervises: "#ef4444",
+        webpage: "#64748b", // gray - links
+        default: "#94a3b8", // default gray
+      };
+
+      function getEdgeColor(type) {
+        return edgeColors[type] || edgeColors["default"];
+      }
+
+      // =================================================================
+      // Natural Language Query Functions
+      // =================================================================
+      async function askQuestion() {
+        const input = document.getElementById("nlqInput");
+        const question = input.value.trim();
+        const askBtn = document.getElementById("askBtn");
+        const loadingState = document.getElementById("loadingState");
+        const loadingText = document.getElementById("loadingText");
+        const answerSection = document.getElementById("answerSection");
+        const resultsContent = document.getElementById("resultsContent");
+        const resultsCount = document.getElementById("resultsCount");
+
+        if (!question) return;
+
+        // Show loading state
+        askBtn.disabled = true;
+        loadingState.classList.remove("hidden");
+        answerSection.classList.add("hidden");
+        resultsContent.innerHTML = "";
+        resultsCount.textContent = "...";
+        loadingText.textContent = "Understanding your question...";
+
+        const loadingMessages = [
+          "Understanding your question...",
+          "Generating SPARQL query...",
+          "Querying knowledge graph...",
+        ];
+        let msgIndex = 0;
+        const loadingInterval = setInterval(() => {
+          msgIndex = Math.min(msgIndex + 1, loadingMessages.length - 1);
+          loadingText.textContent = loadingMessages[msgIndex];
+        }, 2000);
+
+        try {
+          const response = await fetch("/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question }),
+          });
+
+          clearInterval(loadingInterval);
+
+          const data = await response.json();
+
+          if (!response.ok || !data.success) {
+            throw new Error(data.error || `HTTP ${response.status}`);
+          }
+
+          // Show generated SPARQL
+          if (data.sparql) {
+            document.getElementById("queryEditor").value = data.sparql;
+          }
+
+          // Show answer
+          if (data.answer) {
+            answerSection.classList.remove("hidden");
+            document.getElementById("answerText").textContent = data.answer;
+          }
+
+          // Display table results
+          if (data.results && data.results.results) {
+            queryResults = data.results.results.bindings || [];
+            displayResults(data.results);
+            highlightResults();
+          } else {
+            queryResults = [];
+            resultsCount.textContent = "0 rows";
+            resultsContent.innerHTML = '<div class="text-center text-slate-400 py-4"><p class="text-sm">No results found</p></div>';
+          }
+
+          // Update connection status
+          document.getElementById("connectionStatus").innerHTML = '<span class="w-2 h-2 bg-green-500 rounded-full"></span>';
+          document.getElementById("modeIndicator").innerHTML = '<span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span><span class="text-sm text-slate-600">Online (NLQ + GraphDB)</span>';
+
+        } catch (error) {
+          clearInterval(loadingInterval);
+          showError("Query failed: " + error.message);
+          document.getElementById("connectionStatus").innerHTML = '<span class="w-2 h-2 bg-red-500 rounded-full"></span>';
+        } finally {
+          askBtn.disabled = false;
+          loadingState.classList.add("hidden");
+        }
+      }
+
+      function setQuestion(text) {
+        document.getElementById("nlqInput").value = text;
+      }
+
+      function toggleSparqlPanel() {
+        const panel = document.getElementById("sparqlPanel");
+        const icon = document.getElementById("sparqlToggleIcon");
+        panel.classList.toggle("hidden");
+        icon.style.transform = panel.classList.contains("hidden") ? "" : "rotate(180deg)";
+      }
+
+      function copySparql() {
+        const editor = document.getElementById("queryEditor");
+        navigator.clipboard.writeText(editor.value).then(() => {
+          const btn = event.target.closest("button");
+          const originalText = btn.textContent;
+          btn.textContent = "Copied!";
+          setTimeout(() => { btn.textContent = originalText; }, 1500);
+        });
+      }
+
+      // (Predefined queries removed - NLQ handles query generation now)
+
+      // =================================================================
+      // Color Palette
+      // =================================================================
+      // Distinct colors for each entity type - maximally different hues
+      const fixedTypeColors = {
+        // Organizational hierarchy - blues/purples
+        University: "#1e3a8a",      // Deep blue
+        School: "#dc2626",          // Red
+        Institute: "#2563eb",       // Bright blue (changed from green)
+        ResearchCenter: "#7c3aed",  // Violet
+        Chair: "#ca8a04",           // Dark yellow/gold
+
+        // Academic staff - warm colors
+        Professor: "#0891b2",       // Cyan
+        JuniorProfessor: "#06b6d4", // Light cyan (distinct from teal)
+        PostDoc: "#c026d3",         // Fuchsia
+        ResearchAssistant: "#ea580c", // Orange
+        PhDStudent: "#8b5cf6",      // Light violet (changed from indigo)
+        AcademicStaff: "#f472b6",   // Light pink (changed from lime)
+        StudentAssistant: "#fbbf24", // Yellow
+        HonoraryProfessor: "#0e7490", // Dark cyan
+        AdjunctProfessor: "#0284c7", // Light blue
+        VisitingProfessor: "#0369a1", // Sky blue
+        Person: "#6b7280",          // Gray
+
+        // Programs - pinks/magentas
+        MasterProgram: "#db2777",   // Deep pink
+        BachelorProgram: "#9333ea", // Purple
+        Minor: "#a855f7",           // Light purple (changed from sky blue)
+        StudyProgram: "#be185d",    // Rose
+
+        // Courses & Projects - distinct colors
+        Course: "#16a34a",          // Green (kept but brighter)
+        ResearchProject: "#92400e", // Brown
+        HiWiPosition: "#d97706",    // Amber
+        Unknown: "#94a3b8",         // Slate
+      };
+
+      const colorPalette = [
+        "#1e3a8a", "#dc2626", "#2563eb", "#7c3aed", "#ca8a04",
+        "#0891b2", "#c026d3", "#ea580c", "#8b5cf6", "#f472b6",
+        "#db2777", "#9333ea", "#a855f7", "#16a34a", "#d97706",
+        "#92400e", "#06b6d4", "#be185d", "#0e7490", "#6b7280",
+      ];
+
+      const typePriority = {
+        University: 100,
+        School: 90,
+        Institute: 80,
+        ResearchCenter: 75,
+        Professor: 70,
+        JuniorProfessor: 65,
+        PostDoc: 60,
+        ResearchAssistant: 55,
+        PhDStudent: 50,
+        AcademicStaff: 45,
+        Person: 40,
+        MasterProgram: 35,
+        BachelorProgram: 30,
+        StudyProgram: 25,
+        Course: 20,
+      };
+
+      // =================================================================
+      // Sidebar Toggle
+      // =================================================================
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const toggleBtn = document.getElementById("sidebarToggleBtn");
+        const toggleIcon = document.getElementById("toggleIcon");
+
+        sidebarOpen = !sidebarOpen;
+
+        if (sidebarOpen) {
+          sidebar.classList.remove("-translate-x-full");
+          toggleBtn.classList.add("hidden");
+          toggleIcon.style.transform = "rotate(0deg)";
+        } else {
+          sidebar.classList.add("-translate-x-full");
+          toggleBtn.classList.remove("hidden");
+          toggleIcon.style.transform = "rotate(180deg)";
+        }
+
+        // Recenter graph after transition
+        setTimeout(() => {
+          if (simulation) {
+            const container = document.getElementById("graph");
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            simulation.force("center", d3.forceCenter(width / 2, height / 2));
+            simulation.alpha(0.1).restart();
+          }
+        }, 300);
+      }
+
+      // =================================================================
+      // Reset All - Clear everything
+      // =================================================================
+      function resetAll() {
+        // Clear NLQ input
+        document.getElementById("nlqInput").value = "";
+
+        // Clear query editor
+        document.getElementById("queryEditor").value = "";
+
+        // Hide answer
+        document.getElementById("answerSection").classList.add("hidden");
+
+        // Clear results
+        queryResults = [];
+        document.getElementById("resultsCount").textContent = "0 rows";
+        document.getElementById("resultsContent").innerHTML = `
+                <div class="text-center text-slate-400 py-8">
+                    <svg class="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    <p class="text-sm">Ask a question to see results</p>
+                </div>
+            `;
+
+        // Reset checkboxes
+        document.getElementById("autoZoom").checked = true;
+        document.getElementById("filterMode").checked = false;
+        document.getElementById("showEdgeLabels").checked = false;
+        showEdgeLabels = false;
+
+        // Clear search
+        document.getElementById("graphSearch").value = "";
+
+        // Clear graph highlights and reset zoom
+        clearHighlights();
+
+        // Hide edge labels
+        if (linkLabel) {
+          linkLabel.classed("hidden", true);
+        }
+      }
+
+      // =================================================================
+      // Run SPARQL Query
+      // =================================================================
+      async function runQuery() {
+        const endpoint = document.getElementById("endpoint").value;
+        const query = document.getElementById("queryEditor").value;
+        const resultsContent = document.getElementById("resultsContent");
+        const resultsCount = document.getElementById("resultsCount");
+        const runBtn = document.getElementById("runQueryBtn");
+        const modeIndicator = document.getElementById("modeIndicator");
+        const connectionStatus = document.getElementById("connectionStatus");
+
+        if (!query.trim()) {
+          showError("Please enter a SPARQL query");
+          return;
+        }
+
+        runBtn.disabled = true;
+        runBtn.innerHTML = `
+                <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Running...</span>
+            `;
+        resultsContent.innerHTML = `
+                <div class="flex items-center justify-center py-8 text-slate-400">
+                    <svg class="w-6 h-6 animate-spin mr-2" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                    <span>Executing query...</span>
+                </div>
+            `;
+
+        try {
+          const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              Accept: "application/sparql-results+json",
+            },
+            body: `query=${encodeURIComponent(query)}`,
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+          queryResults = data.results?.bindings || [];
+
+          // Update connection status
+          connectionStatus.innerHTML = `
+                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                    <span class="text-green-600">Connected</span>
+                `;
+          modeIndicator.innerHTML = `
+                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                    <span class="text-sm text-slate-600">Online (GraphDB)</span>
+                `;
+
+          displayResults(data);
+
+          // Auto-highlight results in graph
+          const matchCount = highlightResults();
+          if (matchCount > 0) {
+            console.log(`Highlighted ${matchCount} nodes in graph`);
+          }
+        } catch (error) {
+          console.error("Query error:", error);
+          connectionStatus.innerHTML = `
+                    <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                    <span class="text-red-600">Connection failed</span>
+                `;
+          showError(
+            `Query failed: ${error.message}<br><small class="text-slate-500">Make sure GraphDB is running at the specified endpoint.</small>`,
+          );
+          resultsCount.textContent = "Error";
+        }
+
+        runBtn.disabled = false;
+        runBtn.innerHTML = `
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>Run Query</span>
+            `;
+      }
+
+      // =================================================================
+      // Display Results
+      // =================================================================
+      function displayResults(data) {
+        const resultsContent = document.getElementById("resultsContent");
+        const resultsCount = document.getElementById("resultsCount");
+
+        const bindings = data.results?.bindings || [];
+        const vars = data.head?.vars || [];
+
+        resultsCount.textContent = `${bindings.length} rows`;
+
+        if (bindings.length === 0) {
+          resultsContent.innerHTML = `
+                    <div class="text-center text-slate-400 py-8">
+                        <svg class="w-10 h-10 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <p class="text-sm">No results found</p>
+                    </div>
+                `;
+          return;
+        }
+
+        let html =
+          '<div class="overflow-x-auto"><table class="w-full text-xs">';
+        html += '<thead><tr class="border-b border-slate-200">';
+        vars.forEach((v) => {
+          html += `<th class="text-left py-2 px-2 font-semibold text-slate-600 uppercase tracking-wide">${v}</th>`;
+        });
+        html += "</tr></thead><tbody>";
+
+        bindings.slice(0, 100).forEach((row, i) => {
+          html += `<tr class="${i % 2 === 0 ? "bg-slate-50" : ""} hover:bg-blue-50 transition">`;
+          vars.forEach((v) => {
+            const cell = row[v];
+            let value = cell?.value || "";
+
+            if (cell?.type === "uri") {
+              const shortValue = value.split("#").pop().split("/").pop();
+              value = `<span class="text-blue-600 cursor-help" title="${value}">${shortValue}</span>`;
+            } else if (value.includes("@")) {
+              value = `<a href="mailto:${value}" class="text-blue-600 hover:underline">${value}</a>`;
+            }
+
+            html += `<td class="py-1.5 px-2 truncate max-w-32" title="${cell?.value || ""}">${value}</td>`;
+          });
+          html += "</tr>";
+        });
+
+        html += "</tbody></table></div>";
+
+        if (bindings.length > 100) {
+          html += `<p class="text-xs text-slate-500 mt-2 text-center">Showing first 100 of ${bindings.length} results</p>`;
+        }
+
+        resultsContent.innerHTML = html;
+      }
+
+      function showError(message) {
+        document.getElementById("resultsContent").innerHTML = `
+                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                    ${message}
+                </div>
+            `;
+      }
+
+      // =================================================================
+      // Highlight & Clear with Auto-zoom
+      // =================================================================
+      function highlightResults() {
+        if (!queryResults.length || !node) {
+          return;
+        }
+
+        const filterMode = document.getElementById("filterMode").checked;
+        const autoZoom = document.getElementById("autoZoom").checked;
+
+        const resultURIs = new Set();
+        const resultNames = new Set();
+
+        queryResults.forEach((row) => {
+          Object.values(row).forEach((cell) => {
+            if (cell?.type === "uri") resultURIs.add(cell.value);
+            if (cell?.type === "literal" && cell.value)
+              resultNames.add(cell.value.toLowerCase());
+          });
+        });
+
+        // Track matched nodes for zoom
+        const matchedNodes = [];
+
+        node.each(function (d) {
+          const isMatch =
+            resultURIs.has(d.id) ||
+            resultNames.has((d.name || "").toLowerCase());
+          if (isMatch) matchedNodes.push(d);
+        });
+
+        // Apply highlighting
+        node.classed(
+          "highlighted",
+          (d) =>
+            resultURIs.has(d.id) ||
+            resultNames.has((d.name || "").toLowerCase()),
+        );
+
+        // Filter mode: hide non-matching nodes completely
+        if (filterMode) {
+          node.style("display", (d) => {
+            const isMatch =
+              resultURIs.has(d.id) ||
+              resultNames.has((d.name || "").toLowerCase());
+            return isMatch ? null : "none";
+          });
+          link.style("display", (d) => {
+            const sourceId =
+              typeof d.source === "object" ? d.source.id : d.source;
+            const targetId =
+              typeof d.target === "object" ? d.target.id : d.target;
+            const sourceMatch = resultURIs.has(sourceId);
+            const targetMatch = resultURIs.has(targetId);
+            return sourceMatch || targetMatch ? null : "none";
+          });
+          if (linkLabel) {
+            linkLabel.style("display", (d) => {
+              if (!showEdgeLabels) return "none";
+              const sourceId =
+                typeof d.source === "object" ? d.source.id : d.source;
+              const targetId =
+                typeof d.target === "object" ? d.target.id : d.target;
+              const sourceMatch = resultURIs.has(sourceId);
+              const targetMatch = resultURIs.has(targetId);
+              return sourceMatch || targetMatch ? null : "none";
+            });
+          }
+        } else {
+          // Dim mode: just reduce opacity
+          node.style("display", null);
+          link.style("display", null);
+          node.classed("dimmed", (d) => {
+            const isMatch =
+              resultURIs.has(d.id) ||
+              resultNames.has((d.name || "").toLowerCase());
+            return !isMatch;
+          });
+          link.classed("dimmed", (d) => {
+            const sourceId =
+              typeof d.source === "object" ? d.source.id : d.source;
+            const targetId =
+              typeof d.target === "object" ? d.target.id : d.target;
+            return !(resultURIs.has(sourceId) || resultURIs.has(targetId));
+          });
+          if (linkLabel) {
+            linkLabel.style("display", showEdgeLabels ? null : "none");
+            linkLabel.classed("dimmed", (d) => {
+              const sourceId =
+                typeof d.source === "object" ? d.source.id : d.source;
+              const targetId =
+                typeof d.target === "object" ? d.target.id : d.target;
+              return !(resultURIs.has(sourceId) || resultURIs.has(targetId));
+            });
+          }
+        }
+
+        link.classed("highlighted", (d) => {
+          const sourceId =
+            typeof d.source === "object" ? d.source.id : d.source;
+          const targetId =
+            typeof d.target === "object" ? d.target.id : d.target;
+          return resultURIs.has(sourceId) || resultURIs.has(targetId);
+        });
+
+        // Pulse animation for highlighted nodes
+        node
+          .filter(".highlighted")
+          .select("circle")
+          .transition()
+          .duration(200)
+          .attr("r", (d) => getNodeSize(d) * 1.4)
+          .transition()
+          .duration(200)
+          .attr("r", (d) => getNodeSize(d));
+
+        // Auto-zoom to fit highlighted nodes
+        if (autoZoom && matchedNodes.length > 0) {
+          zoomToNodes(matchedNodes);
+        }
+
+        return matchedNodes.length;
+      }
+
+      function zoomToNodes(nodes) {
+        if (!nodes.length || !svg || !zoom) return;
+
+        const container = document.getElementById("graph");
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        // Calculate bounding box of nodes
+        let minX = Infinity,
+          maxX = -Infinity;
+        let minY = Infinity,
+          maxY = -Infinity;
+
+        nodes.forEach((d) => {
+          if (d.x < minX) minX = d.x;
+          if (d.x > maxX) maxX = d.x;
+          if (d.y < minY) minY = d.y;
+          if (d.y > maxY) maxY = d.y;
+        });
+
+        // Add padding
+        const padding = 100;
+        minX -= padding;
+        maxX += padding;
+        minY -= padding;
+        maxY += padding;
+
+        // Calculate zoom transform
+        const boxWidth = maxX - minX;
+        const boxHeight = maxY - minY;
+        const scale =
+          Math.min(
+            width / boxWidth,
+            height / boxHeight,
+            2, // Max zoom level
+          ) * 0.9; // Slight reduction for comfort
+
+        const centerX = (minX + maxX) / 2;
+        const centerY = (minY + maxY) / 2;
+
+        const transform = d3.zoomIdentity
+          .translate(width / 2, height / 2)
+          .scale(scale)
+          .translate(-centerX, -centerY);
+
+        // Animate zoom
+        svg
+          .transition()
+          .duration(750)
+          .ease(d3.easeCubicInOut)
+          .call(zoom.transform, transform);
+      }
+
+      function clearHighlights() {
+        if (node) {
+          node.classed("highlighted", false).classed("dimmed", false);
+          node.style("display", null);
+        }
+        if (link) {
+          link.classed("highlighted", false).classed("dimmed", false);
+          link.style("display", null);
+        }
+        if (linkLabel) {
+          linkLabel.classed("dimmed", false);
+          linkLabel.style("display", showEdgeLabels ? null : "none");
+        }
+        // Reset zoom
+        if (svg && zoom) {
+          svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity);
+        }
+      }
+
+      function toggleEdgeLabels() {
+        showEdgeLabels = document.getElementById("showEdgeLabels").checked;
+        if (linkLabel) {
+          // Get current zoom level
+          const currentTransform = d3.zoomTransform(svg.node());
+          const zoomLevel = currentTransform.k;
+          // Show labels only if enabled AND zoomed in enough
+          linkLabel.classed("hidden", !showEdgeLabels || zoomLevel < 0.8);
+        }
+      }
+
+      // =================================================================
+      // Export Results
+      // =================================================================
+      function exportResults() {
+        if (!queryResults.length) {
+          alert("No results to export");
+          return;
+        }
+
+        const vars = Object.keys(queryResults[0]);
+        let csv = vars.join(",") + "\n";
+
+        queryResults.forEach((row) => {
+          csv +=
+            vars
+              .map((v) => `"${(row[v]?.value || "").replace(/"/g, '""')}"`)
+              .join(",") + "\n";
+        });
+
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "sparql_results.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      // =================================================================
+      // Graph Functions
+      // =================================================================
+      function getNodeSize(d) {
+        const sizes = {
+          University: 28,
+          School: 20,
+          Institute: 16,
+          Professor: 12,
+          JuniorProfessor: 12,
+          MasterProgram: 10,
+          BachelorProgram: 10,
+        };
+        return sizes[d.type] || 8;
+      }
+
+      function searchNodes(term) {
+        if (!node) return;
+
+        term = term.toLowerCase();
+
+        if (!term) {
+          node.classed("dimmed", (d) => !activeTypes.has(d.type));
+          link.classed("dimmed", false);
+          if (linkLabel) {
+            linkLabel.classed("dimmed", false);
+          }
+          return;
+        }
+
+        node.classed("dimmed", (d) => {
+          const name = (d.name || "").toLowerCase();
+          const type = (d.type || "").toLowerCase();
+          return !(name.includes(term) || type.includes(term));
+        });
+      }
+
+      function resetZoom() {
+        if (svg && zoom) {
+          svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity);
+        }
+      }
+
+      function initGraph() {
+        const container = document.getElementById("graph");
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        svg = d3
+          .select("#graph")
+          .append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+        g = svg.append("g");
+
+        zoom = d3
+          .zoom()
+          .scaleExtent([0.1, 4])
+          .on("zoom", (event) => {
+            g.attr("transform", event.transform);
+            // Only show edge labels when zoomed in enough
+            if (linkLabel && showEdgeLabels) {
+              const zoomLevel = event.transform.k;
+              linkLabel.classed("hidden", zoomLevel < 0.8);
+            }
+          });
+
+        svg.call(zoom);
+
+        d3.json("d3_graph.json")
+          .then((data) => {
+            graphData = data;
+            renderGraph(data, width, height);
+          })
+          .catch((error) => {
+            console.error("Error loading data:", error);
+            document.getElementById("nodeCount").textContent =
+              "Error loading graph";
+          });
+      }
+
+      function renderGraph(data, width, height) {
+        // Build color mapping
+        const typeSet = new Set();
+        data.nodes.forEach((n) => {
+          if (n.type && n.type !== "Unknown") typeSet.add(n.type);
+        });
+
+        const sortedTypes = Array.from(typeSet).sort(
+          (a, b) => (typePriority[b] || 0) - (typePriority[a] || 0),
+        );
+
+        sortedTypes.forEach((type, i) => {
+          // Use fixed colors if defined, otherwise fall back to palette
+          typeColors[type] = fixedTypeColors[type] || colorPalette[i % colorPalette.length];
+        });
+        typeColors["Unknown"] = fixedTypeColors["Unknown"];
+
+        activeTypes = new Set(sortedTypes);
+
+        // Count nodes
+        const typeCounts = {};
+        data.nodes.forEach((n) => {
+          const type = n.type || "Unknown";
+          typeCounts[type] = (typeCounts[type] || 0) + 1;
+        });
+
+        // Generate legend
+        const legendContainer = document.getElementById("legendItems");
+        legendContainer.innerHTML = "";
+
+        sortedTypes.forEach((type) => {
+          const item = document.createElement("div");
+          item.className =
+            "flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer hover:bg-slate-100 transition";
+          item.dataset.type = type;
+          item.innerHTML = `
+                    <span class="w-3 h-3 rounded-full flex-shrink-0" style="background: ${typeColors[type]}"></span>
+                    <span class="text-sm text-slate-700 flex-1">${type}</span>
+                    <span class="text-xs text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">${typeCounts[type] || 0}</span>
+                `;
+          item.onclick = () => toggleType(type, item);
+          legendContainer.appendChild(item);
+        });
+
+        // Generate dynamic edge legend
+        const edgeLegendContainer = document.getElementById("edgeLegendItems");
+        edgeLegendContainer.innerHTML = "";
+
+        // Count edge types from data
+        const edgeTypeCounts = {};
+        data.links.forEach((link) => {
+          const edgeType = link.type || "other";
+          edgeTypeCounts[edgeType] = (edgeTypeCounts[edgeType] || 0) + 1;
+        });
+
+        // Sort edge types by count (most common first)
+        const sortedEdgeTypes = Object.entries(edgeTypeCounts)
+          .sort((a, b) => b[1] - a[1])
+          .map(([type]) => type);
+
+        sortedEdgeTypes.forEach((edgeType) => {
+          const item = document.createElement("div");
+          item.className = "flex items-center gap-2 px-2 py-1";
+          const color = getEdgeColor(edgeType);
+          item.innerHTML = `
+                    <span class="w-6 h-0.5 rounded flex-shrink-0" style="background: ${color}"></span>
+                    <span class="text-slate-600 flex-1">${edgeType}</span>
+                    <span class="text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">${edgeTypeCounts[edgeType]}</span>
+                `;
+          edgeLegendContainer.appendChild(item);
+        });
+
+        // Update stats
+        document.getElementById("nodeCount").textContent =
+          `${data.nodes.length} nodes`;
+        document.getElementById("edgeCount").textContent =
+          `${data.links.length} edges`;
+
+        // Simulation
+        simulation = d3
+          .forceSimulation(data.nodes)
+          .force(
+            "link",
+            d3
+              .forceLink(data.links)
+              .id((d) => d.id)
+              .distance(80),
+          )
+          .force("charge", d3.forceManyBody().strength(-200))
+          .force("center", d3.forceCenter(width / 2, height / 2))
+          .force("collision", d3.forceCollide().radius(25));
+
+        // Links
+        link = g
+          .append("g")
+          .selectAll("line")
+          .data(data.links)
+          .join("line")
+          .attr("class", "link")
+          .attr("stroke", (d) => getEdgeColor(d.type));
+
+        // Link Labels (edge names)
+        linkLabel = g
+          .append("g")
+          .selectAll("text")
+          .data(data.links)
+          .join("text")
+          .attr("class", "link-label" + (showEdgeLabels ? "" : " hidden"))
+          .attr("fill", (d) => getEdgeColor(d.type))
+          .text((d) => d.type || "");
+
+        // Nodes
+        node = g
+          .append("g")
+          .selectAll("g")
+          .data(data.nodes)
+          .join("g")
+          .attr("class", "node")
+          .call(
+            d3
+              .drag()
+              .on("start", dragstarted)
+              .on("drag", dragged)
+              .on("end", dragended),
+          );
+
+        node
+          .append("circle")
+          .attr("r", (d) => getNodeSize(d))
+          .attr("fill", (d) => typeColors[d.type] || typeColors["Unknown"]);
+
+        node
+          .append("text")
+          .text((d) =>
+            d.name
+              ? d.name.substring(0, 18) + (d.name.length > 18 ? "..." : "")
+              : "",
+          )
+          .attr("x", (d) => getNodeSize(d) + 4)
+          .attr("y", 4)
+          .attr("class", "fill-slate-600");
+
+        // Tooltip
+        const tooltip = document.getElementById("tooltip");
+        const tooltipContent = document.getElementById("tooltipContent");
+
+        node
+          .on("mouseover", (event, d) => {
+            let html = `
+                    <div class="font-bold text-slate-800 text-sm mb-1">${d.name || "Unknown"}</div>
+                    <span class="inline-block text-xs px-2 py-0.5 rounded-full text-white mb-2" style="background: ${typeColors[d.type] || "#94a3b8"}">${d.type || "Unknown"}</span>
+                `;
+
+            // Show ALL properties of the node (except internal D3 properties)
+            const skipProps = new Set(['id', 'name', 'type', 'index', 'x', 'y', 'vx', 'vy', 'fx', 'fy']);
+            const props = Object.entries(d).filter(([key, val]) =>
+              !skipProps.has(key) && val !== null && val !== undefined && val !== ''
+            );
+
+            if (props.length > 0) {
+              html += '<div class="mt-2 space-y-1">';
+              props.forEach(([key, value]) => {
+                // Format the key nicely (camelCase to Title Case)
+                const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+                // Format value based on type
+                let displayValue = value;
+                if (key === 'email' || (typeof value === 'string' && value.includes('@'))) {
+                  displayValue = `<a href="mailto:${value}" class="text-blue-600">${value}</a>`;
+                } else if (typeof value === 'string' && value.startsWith('http')) {
+                  displayValue = `<a href="${value}" target="_blank" class="text-blue-600 break-all">${value.length > 50 ? value.substring(0, 50) + '...' : value}</a>`;
+                } else if (typeof value === 'string' && value.length > 100) {
+                  displayValue = value.substring(0, 100) + '...';
+                }
+                html += `<div class="text-xs text-slate-600"><strong>${label}:</strong> ${displayValue}</div>`;
+              });
+              html += '</div>';
+            }
+
+            const connections = data.links.filter(
+              (l) => l.source.id === d.id || l.target.id === d.id,
+            ).length;
+            html += `<div class="text-xs text-slate-500 mt-2 pt-2 border-t border-slate-100">${connections} connections</div>`;
+
+            tooltipContent.innerHTML = html;
+            tooltip.classList.remove("hidden");
+            positionTooltip(event, tooltip);
+          })
+          .on("mouseout", () => {
+            tooltip.classList.add("hidden");
+          })
+          .on("mousemove", (event) => {
+            positionTooltip(event, tooltip);
+          });
+
+        // Helper function to position tooltip within viewport
+        function positionTooltip(event, tooltip) {
+          const tooltipRect = tooltip.getBoundingClientRect();
+          const padding = 15;
+          const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
+
+          let left = event.pageX + padding;
+          let top = event.pageY + padding;
+
+          // Check right edge - if tooltip goes off screen, position to the left of cursor
+          if (left + tooltipRect.width > viewportWidth - padding) {
+            left = event.pageX - tooltipRect.width - padding;
+          }
+
+          // Check bottom edge - if tooltip goes off screen, position above cursor
+          if (top + tooltipRect.height > viewportHeight - padding) {
+            top = event.pageY - tooltipRect.height - padding;
+          }
+
+          // Ensure tooltip doesn't go off left or top edges
+          left = Math.max(padding, left);
+          top = Math.max(padding, top);
+
+          tooltip.style.left = left + "px";
+          tooltip.style.top = top + "px";
+        }
+
+        simulation.on("tick", () => {
+          link
+            .attr("x1", (d) => d.source.x)
+            .attr("y1", (d) => d.source.y)
+            .attr("x2", (d) => d.target.x)
+            .attr("y2", (d) => d.target.y);
+
+          // Position link labels at midpoint with offset perpendicular to edge
+          linkLabel
+            .attr("x", (d) => {
+              const midX = (d.source.x + d.target.x) / 2;
+              // Add small perpendicular offset based on edge index to reduce overlap
+              const dx = d.target.x - d.source.x;
+              const dy = d.target.y - d.source.y;
+              const len = Math.sqrt(dx * dx + dy * dy) || 1;
+              const offsetX = (-dy / len) * 8; // perpendicular offset
+              return midX + offsetX;
+            })
+            .attr("y", (d) => {
+              const midY = (d.source.y + d.target.y) / 2;
+              const dx = d.target.x - d.source.x;
+              const dy = d.target.y - d.source.y;
+              const len = Math.sqrt(dx * dx + dy * dy) || 1;
+              const offsetY = (dx / len) * 8; // perpendicular offset
+              return midY + offsetY;
+            })
+            .attr("transform", (d) => {
+              // Rotate label to align with edge
+              const midX = (d.source.x + d.target.x) / 2;
+              const midY = (d.source.y + d.target.y) / 2;
+              let angle =
+                (Math.atan2(d.target.y - d.source.y, d.target.x - d.source.x) *
+                  180) /
+                Math.PI;
+              // Keep text readable (not upside down)
+              if (angle > 90) angle -= 180;
+              if (angle < -90) angle += 180;
+              const dx = d.target.x - d.source.x;
+              const dy = d.target.y - d.source.y;
+              const len = Math.sqrt(dx * dx + dy * dy) || 1;
+              const offsetX = (-dy / len) * 8;
+              const offsetY = (dx / len) * 8;
+              return `rotate(${angle}, ${midX + offsetX}, ${midY + offsetY})`;
+            });
+
+          node.attr("transform", (d) => `translate(${d.x},${d.y})`);
+        });
+
+        function dragstarted(event) {
+          if (!event.active) simulation.alphaTarget(0.3).restart();
+          event.subject.fx = event.subject.x;
+          event.subject.fy = event.subject.y;
+        }
+        function dragged(event) {
+          event.subject.fx = event.x;
+          event.subject.fy = event.y;
+        }
+        function dragended(event) {
+          if (!event.active) simulation.alphaTarget(0);
+          event.subject.fx = null;
+          event.subject.fy = null;
+        }
+      }
+
+      function toggleType(type, element) {
+        if (activeTypes.has(type)) {
+          activeTypes.delete(type);
+          element.classList.add("opacity-40");
+        } else {
+          activeTypes.add(type);
+          element.classList.remove("opacity-40");
+        }
+        updateVisibility();
+      }
+
+      function updateVisibility() {
+        node.classed("dimmed", (d) => !activeTypes.has(d.type));
+        link.classed("dimmed", (d) => {
+          const srcType =
+            typeof d.source === "object"
+              ? d.source.type
+              : graphData.nodes.find((n) => n.id === d.source)?.type;
+          const tgtType =
+            typeof d.target === "object"
+              ? d.target.type
+              : graphData.nodes.find((n) => n.id === d.target)?.type;
+          return !(activeTypes.has(srcType) && activeTypes.has(tgtType));
+        });
+        if (linkLabel) {
+          linkLabel.classed("dimmed", (d) => {
+            const srcType =
+              typeof d.source === "object"
+                ? d.source.type
+                : graphData.nodes.find((n) => n.id === d.source)?.type;
+            const tgtType =
+              typeof d.target === "object"
+                ? d.target.type
+                : graphData.nodes.find((n) => n.id === d.target)?.type;
+            return !(activeTypes.has(srcType) && activeTypes.has(tgtType));
+          });
+        }
+      }
+
+      // Initialize
+      window.addEventListener("load", () => {
+        initGraph();
+        // Enter key triggers NLQ
+        document.getElementById("nlqInput").addEventListener("keydown", (e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            askQuestion();
+          }
+        });
+      });
+      window.addEventListener("resize", () => {
+        if (svg) {
+          const container = document.getElementById("graph");
+          svg
+            .attr("width", container.clientWidth)
+            .attr("height", container.clientHeight);
+        }
+      });
+    </script>
+  </body>
+</html>

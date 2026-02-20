@@ -1,0 +1,232 @@
+{
+  "http://leuphana.de/resource/chair/unesco-chair-hochschulbildung-für-nachhaltige-entwicklung": {
+    "uri": "http://leuphana.de/resource/chair/unesco-chair-hochschulbildung-für-nachhaltige-entwicklung",
+    "name": "UNESCO Chair \"Hochschulbildung für nachhaltige Entwicklung\"",
+    "description": "Ziel des UNESCO Lehrstuhls \"Hochschulbildung für nachhaltige Entwicklung\" ist es, dieses Leitbild in universitärer Forschung und Lehre zu verankern und durch internationale Kooperation mit Universitäten weltweit voranzubringen.",
+    "parent": null,
+    "headed_by": null,
+    "webpage": "https://www.leuphana.de/portale/unesco-chair.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/portale/unesco-chair.html"
+  },
+  "http://leuphana.de/resource/chair/professur-für-philosophie-insbesondere-kontinentale-philosophie": {
+    "uri": "http://leuphana.de/resource/chair/professur-für-philosophie-insbesondere-kontinentale-philosophie",
+    "name": "Professur für Philosophie, insbesondere kontinentale Philosophie",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/institute-of-philosophy-and-art-history-ipk",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-roberto-nigro",
+    "webpage": "https://www.leuphana.de/institute/ipk/philosophie/professur-fuer-philosophie.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/ipk/philosophie/professur-fuer-philosophie.html"
+  },
+  "http://leuphana.de/resource/chair/professur-für-kunstgeschichte": {
+    "uri": "http://leuphana.de/resource/chair/professur-für-kunstgeschichte",
+    "name": "Professur für Kunstgeschichte",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/institute-of-philosophy-and-art-history-ipk",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-beate-söntgen",
+    "webpage": "https://www.leuphana.de/institute/ipk/kunstwissenschaft/professur-fuer-kunstgeschichte.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/ipk/kunstwissenschaft/professur-fuer-kunstgeschichte.html"
+  },
+  "http://leuphana.de/resource/chair/professur-für-provenienzstudien": {
+    "uri": "http://leuphana.de/resource/chair/professur-für-provenienzstudien",
+    "name": "Professur für Provenienzstudien",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/institute-of-philosophy-and-art-history-ipk",
+    "headed_by": "http://leuphana.de/resource/person/von-prof-dr-lynn-rother-widmet-sich-den-themenbereichen-provenienz-restitution-und-kritische-muse",
+    "webpage": "https://www.leuphana.de/institute/ipk/kunstwissenschaft/professur-fuer-provenienzstudien.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/ipk/kunstwissenschaft/professur-fuer-provenienzstudien.html"
+  },
+  "http://leuphana.de/resource/chair/professur-für-zeitgenössische-kunst": {
+    "uri": "http://leuphana.de/resource/chair/professur-für-zeitgenössische-kunst",
+    "name": "Professur für Zeitgenössische Kunst",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/institute-of-philosophy-and-art-history-ipk",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-susanne-leeb",
+    "webpage": "https://www.leuphana.de/institute/ipk/kunstwissenschaft/professur-fuer-zeitgenoessische-kunst.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/ipk/kunstwissenschaft/professur-fuer-zeitgenoessische-kunst.html"
+  },
+  "http://leuphana.de/resource/chair/verwaltungsprofessur-für-philosophie-der-gegenwart": {
+    "uri": "http://leuphana.de/resource/chair/verwaltungsprofessur-für-philosophie-der-gegenwart",
+    "name": "Verwaltungsprofessur für Philosophie der Gegenwart",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/institute-of-philosophy-and-art-history-ipk",
+    "headed_by": null,
+    "webpage": "https://www.leuphana.de/institute/ipk/philosophie/professur-fuer-praktische-philosophie.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/ipk/philosophie/professur-fuer-praktische-philosophie.html"
+  },
+  "http://leuphana.de/resource/chair/bürgerliches-recht-rechtsvergleichung-sowie-internationales-privat-und-verfahrensrecht": {
+    "uri": "http://leuphana.de/resource/chair/bürgerliches-recht-rechtsvergleichung-sowie-internationales-privat-und-verfahrensrecht",
+    "name": "Bürgerliches Recht, Rechtsvergleichung sowie internationales Privat- und Verfahrensrecht",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-axel-halfmeier",
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/buergerliches-recht/buergerliches-recht-rechtsvergleichung-sowie-internationales-privat-und-verfahrensrecht.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/buergerliches-recht/buergerliches-recht-rechtsvergleichung-sowie-internationales-privat-und-verfahrensrecht.html"
+  },
+  "http://leuphana.de/resource/chair/öffentliches-recht-europa-und-völkerrecht-sowie-kartell-und-regulierungsrecht": {
+    "uri": "http://leuphana.de/resource/chair/öffentliches-recht-europa-und-völkerrecht-sowie-kartell-und-regulierungsrecht",
+    "name": "Öffentliches Recht, Europa- und Völkerrecht sowie Kartell- und Regulierungsrecht",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-jörg-philipp-terhechte-und-sein-team-forschen-und-lehren-im-öffentlichen-recht",
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/oeffentliches-recht/oeffentliches-recht-europa-und-voelkerrecht-sowie-kartell-und-regulierungsrecht.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/oeffentliches-recht/oeffentliches-recht-europa-und-voelkerrecht-sowie-kartell-und-regulierungsrecht.html"
+  },
+  "http://leuphana.de/resource/chair/völkerrecht-und-recht-der-streitbeilegung": {
+    "uri": "http://leuphana.de/resource/chair/völkerrecht-und-recht-der-streitbeilegung",
+    "name": "Völkerrecht und Recht der Streitbeilegung",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-christian-j-tams-llm-cambridge",
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/oeffentliches-recht/voelkerrecht-und-recht-der-streitbeilegung.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/oeffentliches-recht/voelkerrecht-und-recht-der-streitbeilegung.html"
+  },
+  "http://leuphana.de/resource/chair/staats-und-verwaltungsrecht-internationales-öffentliches-recht-sowie-rechtsvergleichung": {
+    "uri": "http://leuphana.de/resource/chair/staats-und-verwaltungsrecht-internationales-öffentliches-recht-sowie-rechtsvergleichung",
+    "name": "Staats- und Verwaltungsrecht, Internationales Öffentliches Recht sowie Rechtsvergleichung",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-till-patrik-holterhus-mle-llm-yale",
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/oeffentliches-recht/staats-und-verwaltungsrecht-internationales-oeffentliches-recht-sowie-rechtsvergleichung.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/oeffentliches-recht/staats-und-verwaltungsrecht-internationales-oeffentliches-recht-sowie-rechtsvergleichung.html"
+  },
+  "http://leuphana.de/resource/chair/öffentliches-recht-und-rechtsphilosophie": {
+    "uri": "http://leuphana.de/resource/chair/öffentliches-recht-und-rechtsphilosophie",
+    "name": "Öffentliches Recht und Rechtsphilosophie",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-alexander-stark-und-sein-team-forschen-schwerpunktmäßig-zu-themen-des-nationalen",
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/oeffentliches-recht/oeffentliches-recht-und-rechtsphilosophie.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/oeffentliches-recht/oeffentliches-recht-und-rechtsphilosophie.html"
+  },
+  "http://leuphana.de/resource/chair/steuerrechtbetriebliche-steuerlehre": {
+    "uri": "http://leuphana.de/resource/chair/steuerrechtbetriebliche-steuerlehre",
+    "name": "Steuerrecht/Betriebliche Steuerlehre",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-alexander-barth",
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/oeffentliches-recht/steuerrecht-betriebliche-steuerlehre.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/oeffentliches-recht/steuerrecht-betriebliche-steuerlehre.html"
+  },
+  "http://leuphana.de/resource/chair/deutsches-europäisches-und-internationales-strafrecht-strafprozessrecht-und-wirtschaftsstrafrecht": {
+    "uri": "http://leuphana.de/resource/chair/deutsches-europäisches-und-internationales-strafrecht-strafprozessrecht-und-wirtschaftsstrafrecht",
+    "name": "Deutsches, Europäisches und Internationales Strafrecht, Strafprozessrecht und Wirtschaftsstrafrecht",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-suzan-denise-hüttemann",
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/strafrecht/deutsches-europaeisches-und-internationales-strafrecht-strafprozessrecht-und-wirtschaftsstrafrecht.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/strafrecht/deutsches-europaeisches-und-internationales-strafrecht-strafprozessrecht-und-wirtschaftsstrafrecht.html"
+  },
+  "http://leuphana.de/resource/chair/bürgerliches-recht-transnationales-privatrecht": {
+    "uri": "http://leuphana.de/resource/chair/bürgerliches-recht-transnationales-privatrecht",
+    "name": "Bürgerliches Recht, Transnationales Privatrecht",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-johanna-croon-gestefeld",
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/buergerliches-recht/buergerliches-recht-transnationales-privatrecht.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/buergerliches-recht/buergerliches-recht-transnationales-privatrecht.html"
+  },
+  "http://leuphana.de/resource/chair/bürgerliches-recht-transnationales-wirtschaftsrecht": {
+    "uri": "http://leuphana.de/resource/chair/bürgerliches-recht-transnationales-wirtschaftsrecht",
+    "name": "Bürgerliches Recht, Transnationales Wirtschaftsrecht",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": null,
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/buergerliches-recht/buergerliches-recht-transnationales-wirtschaftsrecht.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/buergerliches-recht/buergerliches-recht-transnationales-wirtschaftsrecht.html"
+  },
+  "http://leuphana.de/resource/chair/bürgerliches-recht-zivilverfahrensrecht-und-rechtstheorie": {
+    "uri": "http://leuphana.de/resource/chair/bürgerliches-recht-zivilverfahrensrecht-und-rechtstheorie",
+    "name": "Bürgerliches Recht, Zivilverfahrensrecht und Rechtstheorie",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-stefan-klingbeil",
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/buergerliches-recht/buergerliches-recht-zivilverfahrensrecht-und-rechtstheorie.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/buergerliches-recht/buergerliches-recht-zivilverfahrensrecht-und-rechtstheorie.html"
+  },
+  "http://leuphana.de/resource/chair/bürgerliches-recht-arbeitsrecht-und-grundlagen-des-rechts": {
+    "uri": "http://leuphana.de/resource/chair/bürgerliches-recht-arbeitsrecht-und-grundlagen-des-rechts",
+    "name": "Bürgerliches Recht, Arbeitsrecht und Grundlagen des Rechts",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-volker-stief-liegen-neben-dem-bürgerlichen-recht-im-allgemeinen",
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/buergerliches-recht/buergerliches-recht-arbeitsrecht-und-grundlagen-des-rechts.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/buergerliches-recht/buergerliches-recht-arbeitsrecht-und-grundlagen-des-rechts.html"
+  },
+  "http://leuphana.de/resource/chair/deutsches-europäisches-und-internationales-privat-und-unternehmensrecht-rechtsvergleichung": {
+    "uri": "http://leuphana.de/resource/chair/deutsches-europäisches-und-internationales-privat-und-unternehmensrecht-rechtsvergleichung",
+    "name": "Deutsches, Europäisches und Internationales Privat- und Unternehmensrecht, Rechtsvergleichung",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-alexander-schall",
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/buergerliches-recht/deutsches-europaeisches-und-internationales-privat-und-unternehmensrecht-rechtsvergleichung.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/buergerliches-recht/deutsches-europaeisches-und-internationales-privat-und-unternehmensrecht-rechtsvergleichung.html"
+  },
+  "http://leuphana.de/resource/chair/internationales-steuerrecht-insb-außensteuerrecht": {
+    "uri": "http://leuphana.de/resource/chair/internationales-steuerrecht-insb-außensteuerrecht",
+    "name": "Internationales Steuerrecht, insb. Außensteuerrecht",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/leuphana-law-school-lls",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-claus-herfort-lehrt-und-forscht-im-internationalen-steuerrecht",
+    "webpage": "https://www.leuphana.de/institute/lls/professuren/oeffentliches-recht/internationales-steuerrecht-insb-aussensteuerrecht.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/lls/professuren/oeffentliches-recht/internationales-steuerrecht-insb-aussensteuerrecht.html"
+  },
+  "http://leuphana.de/resource/chair/professur-für-neuere-deutsche-literaturwissenschaft-und-literarische-kulturen": {
+    "uri": "http://leuphana.de/resource/chair/professur-für-neuere-deutsche-literaturwissenschaft-und-literarische-kulturen",
+    "name": "Professur für Neuere Deutsche Literaturwissenschaft und Literarische Kulturen",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/institute-of-history-and-literary-cultures-igl",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-sven-kramer",
+    "webpage": "https://www.leuphana.de/institute/igl/literarische-kulturen/professur-fuer-neuere-deutsche-literaturwissenschaft-und-literarische-kulturen.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/igl/literarische-kulturen/professur-fuer-neuere-deutsche-literaturwissenschaft-und-literarische-kulturen.html"
+  },
+  "http://leuphana.de/resource/chair/professur-für-literatur-und-theorie": {
+    "uri": "http://leuphana.de/resource/chair/professur-für-literatur-und-theorie",
+    "name": "Professur für Literatur und Theorie",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/institute-of-history-and-literary-cultures-igl",
+    "headed_by": "http://leuphana.de/resource/person/kevin-drews",
+    "webpage": "https://www.leuphana.de/institute/igl/literarische-kulturen/professur-fuer-literatur-und-theorie.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/igl/literarische-kulturen/professur-fuer-literatur-und-theorie.html"
+  },
+  "http://leuphana.de/resource/chair/juniorprofessur-für-transkulturelle-kunstgeschichte": {
+    "uri": "http://leuphana.de/resource/chair/juniorprofessur-für-transkulturelle-kunstgeschichte",
+    "name": "Juniorprofessur für Transkulturelle Kunstgeschichte",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/institute-of-philosophy-and-art-history-ipk",
+    "headed_by": "http://leuphana.de/resource/person/prof-dr-vera-simone-schulz",
+    "webpage": "https://www.leuphana.de/institute/ipk/kunstwissenschaft/professur-fuer-transkulturelle-kunstgeschichte.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/ipk/kunstwissenschaft/professur-fuer-transkulturelle-kunstgeschichte.html"
+  },
+  "http://leuphana.de/resource/chair/professur-für-neuere-deutsche-und-vergleichende-literaturwissenschaft": {
+    "uri": "http://leuphana.de/resource/chair/professur-für-neuere-deutsche-und-vergleichende-literaturwissenschaft",
+    "name": "Professur für Neuere deutsche und Vergleichende Literaturwissenschaft",
+    "description": null,
+    "parent": "http://leuphana.de/resource/institute/institute-of-history-and-literary-cultures-igl",
+    "headed_by": "http://leuphana.de/resource/person/maud-meyzaud",
+    "webpage": "https://www.leuphana.de/institute/igl/literarische-kulturen/professur-fuer-neuere-deutsche-und-vergleichende-literaturwissenschaft.html",
+    "team_members": [],
+    "source_url": "https://www.leuphana.de/institute/igl/literarische-kulturen/professur-fuer-neuere-deutsche-und-vergleichende-literaturwissenschaft.html"
+  }
+}

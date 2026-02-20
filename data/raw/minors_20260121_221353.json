@@ -1,0 +1,222 @@
+{
+  "http://leuphana.de/resource/minor/ingenieurwissenschaften-vertiefung": {
+    "uri": "http://leuphana.de/resource/minor/ingenieurwissenschaften-vertiefung",
+    "name": "Ingenieurwissenschaften (Vertiefung)",
+    "name_de": "Ingenieurwissenschaften (Vertiefung)",
+    "description": "Studierende des Minors Automatisierungstechnik erwerben ein grundlegendes Verständnis der Automatisierung technischer Systeme.",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-ingenieurwissenschaften-vertiefung.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-ingenieurwissenschaften-vertiefung.html"
+  },
+  "http://leuphana.de/resource/minor/bildungswissenschaft": {
+    "uri": "http://leuphana.de/resource/minor/bildungswissenschaft",
+    "name": "Bildungswissenschaft",
+    "name_de": "Bildungswissenschaft",
+    "description": "Studierende des Minors Bildungswissenschaften erhalten einen Überblick über die Breite dieser akademischen Disziplin.",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-bildungswissenschaft.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-bildungswissenschaft.html"
+  },
+  "http://leuphana.de/resource/minor/betriebswirtschaftslehre": {
+    "uri": "http://leuphana.de/resource/minor/betriebswirtschaftslehre",
+    "name": "Betriebswirtschaftslehre",
+    "name_de": "Betriebswirtschaftslehre",
+    "description": "Der Minor Betriebswirtschaftslehre vermittelt kompaktes Grundwissen über wirtschaftliche Fragen und Vorgänge aus Unternehmenssicht.",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-betriebswirtschaftslehre.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-betriebswirtschaftslehre.html"
+  },
+  "http://leuphana.de/resource/minor/ingenieurwissenschaften-grundlagen": {
+    "uri": "http://leuphana.de/resource/minor/ingenieurwissenschaften-grundlagen",
+    "name": "Ingenieurwissenschaften (Grundlagen)",
+    "name_de": "Ingenieurwissenschaften (Grundlagen)",
+    "description": "Der Minor Industrietechnik bietet einen Überblick über die wichtigsten Technologien und technikorientierten Prozesse in der produzierenden Industrie.",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-ingenieurwissenschaften-grundlagen.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-ingenieurwissenschaften-grundlagen.html"
+  },
+  "http://leuphana.de/resource/minor/soziale-medien-und-informationssysteme": {
+    "uri": "http://leuphana.de/resource/minor/soziale-medien-und-informationssysteme",
+    "name": "Soziale Medien und Informationssysteme",
+    "name_de": "Soziale Medien und Informationssysteme",
+    "description": "Der Minor Informatik umfasst wichtige Inhalte der Kerninformatik.",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-soziale-medien-und-informationssysteme.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-soziale-medien-und-informationssysteme.html"
+  },
+  "http://leuphana.de/resource/minor/volkswirtschaftslehre": {
+    "uri": "http://leuphana.de/resource/minor/volkswirtschaftslehre",
+    "name": "Volkswirtschaftslehre",
+    "name_de": "Volkswirtschaftslehre",
+    "description": "Studierende des Minors Volkswirtschaftslehre untersuchen die ökonomischen Handlungsfaktoren von Individuen und Organisationen in der Gesellschaft.",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-volkswirtschaftslehre.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-volkswirtschaftslehre.html"
+  },
+  "http://leuphana.de/resource/minor/wirtschaftspsychologie": {
+    "uri": "http://leuphana.de/resource/minor/wirtschaftspsychologie",
+    "name": "Wirtschaftspsychologie",
+    "name_de": "Wirtschaftspsychologie",
+    "description": "Der Minor Wirtschaftspsychologie vermittelt Ihnen Wissen über psychologische Prozesse und Gesetzmäßigkeiten und informiert über die Grundlagen psychologischer Methodik.",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-wirtschaftspsychologie.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-wirtschaftspsychologie.html"
+  },
+  "http://leuphana.de/resource/minor/wirtschaftsrecht": {
+    "uri": "http://leuphana.de/resource/minor/wirtschaftsrecht",
+    "name": "Wirtschaftsrecht",
+    "name_de": "Wirtschaftsrecht",
+    "description": "Die Studierenden erwerben im Minor Wirtschaftsrecht Grundkenntnisse in zentralen wirtschaftsrelevanten Rechtsgebieten.",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-wirtschaftsrecht.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-wirtschaftsrecht.html"
+  },
+  "http://leuphana.de/resource/minor/politikwissenschaft": {
+    "uri": "http://leuphana.de/resource/minor/politikwissenschaft",
+    "name": "Politikwissenschaft",
+    "name_de": "Politikwissenschaft",
+    "description": "Der Minor vermittelt vor diesem Hintergrund einen Überblick über die Disziplin der Politikwissenschaft.",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-politikwissenschaft.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-politikwissenschaft.html"
+  },
+  "http://leuphana.de/resource/minor/philosophie": {
+    "uri": "http://leuphana.de/resource/minor/philosophie",
+    "name": "Philosophie",
+    "name_de": "Philosophie",
+    "description": "„Was ist Philosophie?“ Diese Frage nach ihrer Selbstverständigung begleitet die Philosophie seit ihren Anfängen. Dabei ist das philosophische Denken von anderen Denkformen nicht nur inhaltlich, sondern bereits der Art des Fragens nach unterschieden. Es setzt ein bestimmtes Selbstverständnis nicht unbefragt voraus, sondern reflektiert als voraussetzungskritische Selbsterkenntnis immer auch seinen eigenen Sinn.",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-philosophie.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-philosophie.html"
+  },
+  "http://leuphana.de/resource/minor/raumwissenschaften": {
+    "uri": "http://leuphana.de/resource/minor/raumwissenschaften",
+    "name": "Raumwissenschaften",
+    "name_de": "Raumwissenschaften",
+    "description": "Raumwissenschaften studieren ▶für nachhaltige Raumentwicklung ✓Energiewende gestalten ✓Flächen renaturieren ✓Klimawandel begegnen. Jetzt informieren!",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-raumwissenschaften.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-raumwissenschaften.html"
+  },
+  "http://leuphana.de/resource/minor/popular-music-studies": {
+    "uri": "http://leuphana.de/resource/minor/popular-music-studies",
+    "name": "Popular Music Studies",
+    "name_de": "Popular Music Studies",
+    "description": "Ob Plattenlabels, Konzertveranstalter, Rundfunk- und Medienagenturen oder Musikverlage – Die Kreativwirtschaft bietet zahlreiche Beschäftigungsmöglichkeiten und zählt zu einem der größten Arbeitgeber Europas. Mit dem englischsprachigen Minor Popular Music Studies erweitern Sie Ihren wirtschaftlich oder geisteswissenschaftlich ausgerichteten Major um Aspekte der internationalen Popmusik-Forschung. Darüber hinaus bietet der Minor die Möglichkeit, eigene Vorhaben in Zusammenarbeit mit Akteuren der ",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-popular-music-studies.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-popular-music-studies.html"
+  },
+  "http://leuphana.de/resource/minor/nachhaltigkeitswissenschaften": {
+    "uri": "http://leuphana.de/resource/minor/nachhaltigkeitswissenschaften",
+    "name": "Nachhaltigkeitswissenschaften",
+    "name_de": "Nachhaltigkeitswissenschaften",
+    "description": "Das Nebenfach Nachhaltigkeitswissenschaften setzt sich mit Zukunftsfragen einer nachhaltigen Entwicklung auseinander: Im Studium analysieren Sie die Folgen des globalen Wandels und erarbeiten nachhaltige Lösungen zu konkreten gesellschaftlichen Problemen, die aus nicht nachhaltigen Verhaltensweisen resultieren.",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-nachhaltigkeitswissenschaften.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-nachhaltigkeitswissenschaften.html"
+  },
+  "http://leuphana.de/resource/minor/psychology-and-society": {
+    "uri": "http://leuphana.de/resource/minor/psychology-and-society",
+    "name": "Psychology and Society",
+    "name_de": "Psychology and Society",
+    "description": "Die Psychologie bietet einzigartige Perspektiven auf zahlreiche gesellschaftliche Herausforderungen, wie Digitalisierung, Klimawandel, Nachhaltigkeit, Gesundheit oder gesellschaftliche und politische Konflikte. Der englischsprachige Minor Psychology and Society konzentriert sich auf die Anwendung psychologischer Prozesse zur Bewältigung dieser gesellschaftlichen Herausforderungen. Im Minor erarbeiten Sie sich Kompetenzen und angewandtes Wissen, um psychologische Prozesse in relevanten gesellscha",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-psychology-and-society.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-psychology-and-society.html"
+  },
+  "http://leuphana.de/resource/minor/law-and-the-future-society": {
+    "uri": "http://leuphana.de/resource/minor/law-and-the-future-society",
+    "name": "Law and the Future Society",
+    "name_de": "Law and the Future Society",
+    "description": null,
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-law-and-the-future-society.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-law-and-the-future-society.html"
+  },
+  "http://leuphana.de/resource/minor/minor-museum-studies": {
+    "uri": "http://leuphana.de/resource/minor/minor-museum-studies",
+    "name": "Minor Museum Studies",
+    "name_de": "Minor Museum Studies",
+    "description": null,
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-museum-studies.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-museum-studies.html"
+  },
+  "http://leuphana.de/resource/minor/minor-übersicht": {
+    "uri": "http://leuphana.de/resource/minor/minor-übersicht",
+    "name": "Minor Übersicht",
+    "name_de": "Minor Übersicht",
+    "description": "Im Rahmen unseres Bachelor-Programms können Sie neben Ihrem Hauptfach (Major) ein Minor-Fach wählen, das Ihnen zusätzliche Kenntnisse und Fähigkeiten vermittelt. Sie haben die Möglichkeit, aus einer breiten Auswahl an Minorfächern zu wählen, die Ihr Studium bereichern und es Ihnen ermöglichen, Ihre Interessen zu vertiefen.",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-am-leuphana-college.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-am-leuphana-college.html"
+  },
+  "http://leuphana.de/resource/minor/entrepreneurship-studium-im-nebenfach": {
+    "uri": "http://leuphana.de/resource/minor/entrepreneurship-studium-im-nebenfach",
+    "name": "Entrepreneurship: Studium im Nebenfach",
+    "name_de": "Entrepreneurship: Studium im Nebenfach",
+    "description": "Entrepreneurship Studium im Nebenfach: an einer der erfolgreichsten Gründungsuniversitäten ✓StartUp gründen ✓verantwortungsvoll ✓nachhaltig ▶Mehr erfahren!",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-entrepreneurship-studium.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-entrepreneurship-studium.html"
+  },
+  "http://leuphana.de/resource/minor/artificial-intelligence-ki-studium-im-nebenfach": {
+    "uri": "http://leuphana.de/resource/minor/artificial-intelligence-ki-studium-im-nebenfach",
+    "name": "Artificial Intelligence: KI Studium im Nebenfach",
+    "name_de": "Artificial Intelligence: KI Studium im Nebenfach",
+    "description": "KI Studium: Innovatives Nebenfach im Bachelor-Studium ✓KI verstehen & anwenden ✓Maschinelles Lernen ✓Algorithmen ✓Projekte  ▶Jetzt informieren!",
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-artificial-intelligence.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-artificial-intelligence.html"
+  },
+  "http://leuphana.de/resource/minor/geschichte-studieren-im-nebenfach": {
+    "uri": "http://leuphana.de/resource/minor/geschichte-studieren-im-nebenfach",
+    "name": "Geschichte studieren im Nebenfach",
+    "name_de": "Geschichte studieren im Nebenfach",
+    "description": null,
+    "credit_points": null,
+    "part_of_program": null,
+    "offered_by": "http://leuphana.de/resource/school/college",
+    "webpage": "https://www.leuphana.de/college/bachelor/minor-geschichte-studieren.html",
+    "source_url": "https://www.leuphana.de/college/bachelor/minor-geschichte-studieren.html"
+  }
+}

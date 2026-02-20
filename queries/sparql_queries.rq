@@ -1,0 +1,321 @@
+# =============================================================================
+# Leuphana Knowledge Graph - SPARQL Queries
+# =============================================================================
+# These queries answer the competency questions defined for the thesis.
+# Use with GraphDB, Apache Jena, or any SPARQL 1.1 compatible endpoint.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Namespace Prefixes (use at the top of each query)
+# -----------------------------------------------------------------------------
+
+PREFIX leuph: <http://leuphana.de/ontology#>
+PREFIX res: <http://leuphana.de/resource/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX schema: <http://schema.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+# =============================================================================
+# CQ1: Which professors work in which department/school?
+# =============================================================================
+
+SELECT ?professorName ?title ?email ?schoolName ?instituteName
+WHERE {
+    ?professor a leuph:Professor .
+    ?professor leuph:name ?professorName .
+    OPTIONAL { ?professor leuph:title ?title }
+    OPTIONAL { ?professor leuph:email ?email }
+    OPTIONAL {
+        ?professor leuph:worksAt ?school .
+        ?school a leuph:School .
+        ?school leuph:name ?schoolName .
+    }
+    OPTIONAL {
+        ?professor leuph:memberOf ?institute .
+        ?institute a leuph:Institute .
+        ?institute leuph:name ?instituteName .
+    }
+}
+ORDER BY ?schoolName ?professorName
+
+
+# =============================================================================
+# CQ2: Who teaches in which major/program?
+# =============================================================================
+
+SELECT ?professorName ?programName ?programType
+WHERE {
+    ?professor a leuph:Professor .
+    ?professor leuph:name ?professorName .
+    ?professor leuph:teachesIn ?program .
+    ?program leuph:name ?programName .
+    ?program a ?programType .
+    FILTER(?programType IN (leuph:BachelorProgram, leuph:MasterProgram, leuph:DoctoralProgram))
+}
+ORDER BY ?programName ?professorName
+
+
+# =============================================================================
+# CQ3: Which chairs/institutes belong to which faculty/school?
+# =============================================================================
+
+SELECT ?schoolName ?instituteName ?abbreviation
+WHERE {
+    ?institute a leuph:Institute .
+    ?institute leuph:name ?instituteName .
+    ?institute leuph:partOf|leuph:belongsTo ?school .
+    ?school a leuph:School .
+    ?school leuph:name ?schoolName .
+    OPTIONAL { ?institute leuph:abbreviation ?abbreviation }
+}
+ORDER BY ?schoolName ?instituteName
+
+
+# =============================================================================
+# CQ4: Which research groups are associated with a professor?
+# =============================================================================
+
+SELECT ?professorName ?groupName ?groupType
+WHERE {
+    ?professor a leuph:Professor .
+    ?professor leuph:name ?professorName .
+    {
+        ?professor leuph:heads ?group .
+    } UNION {
+        ?professor leuph:memberOf ?group .
+    }
+    ?group a ?groupType .
+    FILTER(?groupType IN (leuph:ResearchGroup, leuph:ResearchCenter))
+    ?group leuph:name ?groupName .
+}
+ORDER BY ?professorName
+
+
+# =============================================================================
+# CQ5: What HiWi/student assistant positions are currently available?
+# =============================================================================
+
+SELECT ?positionTitle ?description ?organization ?contact
+WHERE {
+    ?position a leuph:HiWiPosition .
+    ?position leuph:name ?positionTitle .
+    OPTIONAL { ?position leuph:description ?description }
+    OPTIONAL { 
+        ?position leuph:offeredBy ?org .
+        ?org leuph:name ?organization .
+    }
+    OPTIONAL { ?position leuph:contact ?contact }
+}
+
+
+# =============================================================================
+# CQ6: What is the contact information for a specific professor/staff?
+# =============================================================================
+
+SELECT ?name ?title ?email ?phone ?office ?webpage
+WHERE {
+    ?person a ?type .
+    ?person leuph:name ?name .
+    FILTER(CONTAINS(LCASE(?name), LCASE("$SEARCH_NAME")))
+    FILTER(?type IN (leuph:Professor, leuph:AcademicStaff, foaf:Person))
+    OPTIONAL { ?person leuph:title ?title }
+    OPTIONAL { ?person leuph:email ?email }
+    OPTIONAL { ?person leuph:phone ?phone }
+    OPTIONAL { ?person leuph:office ?office }
+    OPTIONAL { ?person leuph:webpage ?webpage }
+}
+ORDER BY ?name
+
+
+# =============================================================================
+# CQ7: Which programs are offered by each school?
+# =============================================================================
+
+SELECT ?schoolName ?programName ?programType ?duration ?language
+WHERE {
+    ?program a ?programType .
+    ?program leuph:name ?programName .
+    ?program leuph:offeredBy ?school .
+    ?school leuph:name ?schoolName .
+    FILTER(?programType IN (leuph:BachelorProgram, leuph:MasterProgram, leuph:DoctoralProgram))
+    OPTIONAL { ?program leuph:duration ?duration }
+    OPTIONAL { ?program leuph:language ?language }
+}
+ORDER BY ?schoolName ?programType ?programName
+
+
+# =============================================================================
+# CQ8: Who supervises doctoral students?
+# =============================================================================
+
+SELECT ?supervisorName ?studentName ?topic
+WHERE {
+    ?supervisor a leuph:Professor .
+    ?supervisor leuph:name ?supervisorName .
+    ?supervisor leuph:supervises ?student .
+    ?student a leuph:PhDStudent .
+    ?student leuph:name ?studentName .
+    OPTIONAL { ?student leuph:researchTopic ?topic }
+}
+ORDER BY ?supervisorName ?studentName
+
+
+# =============================================================================
+# UTILITY QUERIES
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# List all schools
+# -----------------------------------------------------------------------------
+
+SELECT ?school ?name ?description
+WHERE {
+    ?school a leuph:School .
+    ?school leuph:name ?name .
+    OPTIONAL { ?school leuph:description ?description }
+}
+ORDER BY ?name
+
+
+# -----------------------------------------------------------------------------
+# List all institutes with their schools
+# -----------------------------------------------------------------------------
+
+SELECT ?instituteName ?abbreviation ?schoolName
+WHERE {
+    ?institute a leuph:Institute .
+    ?institute leuph:name ?instituteName .
+    OPTIONAL { ?institute leuph:abbreviation ?abbreviation }
+    OPTIONAL {
+        ?institute leuph:partOf|leuph:belongsTo ?school .
+        ?school leuph:name ?schoolName .
+    }
+}
+ORDER BY ?schoolName ?instituteName
+
+
+# -----------------------------------------------------------------------------
+# Count entities by type
+# -----------------------------------------------------------------------------
+
+SELECT ?type (COUNT(?entity) AS ?count)
+WHERE {
+    ?entity a ?type .
+    FILTER(STRSTARTS(STR(?type), "http://leuphana.de/ontology#"))
+}
+GROUP BY ?type
+ORDER BY DESC(?count)
+
+
+# -----------------------------------------------------------------------------
+# Get knowledge graph statistics
+# -----------------------------------------------------------------------------
+
+SELECT 
+    (COUNT(DISTINCT ?s) AS ?subjects)
+    (COUNT(DISTINCT ?p) AS ?predicates)
+    (COUNT(DISTINCT ?o) AS ?objects)
+    (COUNT(*) AS ?triples)
+WHERE { ?s ?p ?o }
+
+
+# -----------------------------------------------------------------------------
+# Find entities without connections (orphan nodes)
+# -----------------------------------------------------------------------------
+
+SELECT ?entity ?name ?type
+WHERE {
+    ?entity a ?type .
+    ?entity leuph:name ?name .
+    FILTER NOT EXISTS {
+        { ?entity ?p1 ?other1 . FILTER(?p1 != rdf:type && ?p1 != leuph:name && ?p1 != rdfs:label) }
+        UNION
+        { ?other2 ?p2 ?entity . }
+    }
+}
+LIMIT 100
+
+
+# -----------------------------------------------------------------------------
+# Full organizational hierarchy
+# -----------------------------------------------------------------------------
+
+SELECT ?university ?schoolName ?instituteName ?memberName ?memberType
+WHERE {
+    ?uni a leuph:University .
+    ?uni leuph:name ?university .
+    OPTIONAL {
+        ?school a leuph:School .
+        ?school leuph:partOf ?uni .
+        ?school leuph:name ?schoolName .
+        OPTIONAL {
+            ?institute a leuph:Institute .
+            ?institute leuph:partOf|leuph:belongsTo ?school .
+            ?institute leuph:name ?instituteName .
+            OPTIONAL {
+                ?member leuph:memberOf ?institute .
+                ?member leuph:name ?memberName .
+                ?member a ?memberType .
+                FILTER(?memberType IN (leuph:Professor, leuph:PostDoc, leuph:PhDStudent))
+            }
+        }
+    }
+}
+ORDER BY ?schoolName ?instituteName ?memberName
+
+
+# =============================================================================
+# CONSTRUCT QUERIES (for extracting subgraphs)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Extract a school's complete subgraph
+# -----------------------------------------------------------------------------
+
+CONSTRUCT {
+    ?school ?p1 ?o1 .
+    ?institute ?p2 ?o2 .
+    ?member ?p3 ?o3 .
+}
+WHERE {
+    ?school a leuph:School .
+    ?school leuph:name "School of Sustainability" .
+    ?school ?p1 ?o1 .
+    OPTIONAL {
+        ?institute leuph:partOf|leuph:belongsTo ?school .
+        ?institute ?p2 ?o2 .
+        OPTIONAL {
+            ?member leuph:memberOf ?institute .
+            ?member ?p3 ?o3 .
+        }
+    }
+}
+
+
+# =============================================================================
+# ASK QUERIES (for yes/no questions)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Does a specific professor exist?
+# -----------------------------------------------------------------------------
+
+ASK {
+    ?person a leuph:Professor .
+    ?person leuph:name ?name .
+    FILTER(CONTAINS(LCASE(?name), "mueller"))
+}
+
+
+# -----------------------------------------------------------------------------
+# Is there a sustainability-related program?
+# -----------------------------------------------------------------------------
+
+ASK {
+    ?program a ?type .
+    ?program leuph:name ?name .
+    FILTER(?type IN (leuph:BachelorProgram, leuph:MasterProgram))
+    FILTER(CONTAINS(LCASE(?name), "sustainability"))
+}
