@@ -6,7 +6,7 @@ This module scrapes the Leuphana University website to extract information
 about schools, institutes, professors, staff, and programs.
 
 Author: Bachelor's Thesis Project
-Supervisor: Debayan Banerjee
+Supervisor: Dr.Debayan Banerjee
 """
 
 import asyncio

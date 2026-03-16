@@ -20,7 +20,7 @@ leuphana-kg/
 ├── ontology/                    # Ontology & validation files
 │   ├── leuphana.owl             # Main OWL 2 ontology
 │   ├── shacl_shapes.ttl         # SHACL validation shapes
-│   └── ontology_documentation.md
+│
 ├── scraper/                     # Python source code
 │   ├── config.py                # Scraper configuration & URL patterns
 │   ├── scraper.py               # Web scraper (extracts all entities)
@@ -42,24 +42,7 @@ leuphana-kg/
 ├── .env.example                 # Environment configuration template
 ├── requirements.txt
 └── README.md
-```
 
-## Entity Types Extracted
-
-| Entity          | Description                                    | Count (approx.) |
-| --------------- | ---------------------------------------------- | --------------- |
-| University      | Leuphana University                            | 1               |
-| School          | Faculty units (College, Graduate School, etc.) | 4               |
-| Institute       | Academic institutes                            | 20+             |
-| Chair           | Professorships/Lehrstühle                      | 30+             |
-| Person          | Professors, staff, researchers                 | 1000+           |
-| BachelorProgram | Bachelor degree programs                       | 15+             |
-| MasterProgram   | Master degree programs                         | 40+             |
-| Minor           | Minor study fields (Nebenfächer)               | 20+             |
-| Course          | Courses/modules with instructors               | varies          |
-| HiWiPosition    | Student assistant positions                    | varies          |
-| ResearchProject | Research projects                              | 100+            |
-| ResearchCenter  | Research centers (Zentren)                     | 10+             |
 
 ## Quick Start
 
@@ -313,7 +296,7 @@ GRAPHDB_REPOSITORY=leuphana-kg
 
 # Required for Natural Language Query feature
 OPENAI_API_KEY=sk-your-key-here
-OPENAI_MODEL=gpt-4
+OPENAI_MODEL=gpt-5.2
 ```
 
 ## Technology Stack
@@ -325,7 +308,7 @@ OPENAI_MODEL=gpt-4
 | RDF Generation | RDFLib                            |
 | Triple Store   | GraphDB Free                      |
 | Query Language | SPARQL 1.1                        |
-| NLQ Engine     | LangChain + OpenAI GPT-4          |
+| NLQ Engine     | LangChain + OpenAI GPT-5.2          |
 | Validation     | SHACL                             |
 | Visualization  | D3.js (force-directed graph)      |
 | UI Framework   | Tailwind CSS                      |
@@ -376,17 +359,14 @@ python visualization/server.py
 
 **Important**: Always use `--sitemap sitemapurls.txt` to extract all available data from the university website.
 
-## Documentation
-
-- [Ontology Documentation](ontology/ontology_documentation.md) - Ontology design decisions
-- [Complete Project Explanation](docs/leuphena_kg_complete_explanation.md) - Full technical documentation
-- [Evaluation Report](docs/evaluation_template.md) - Evaluation metrics and results
-
 ## License
 
 Academic use - Bachelor's Thesis Project
 
 ## Author
 
+Nadeem Hakimi
+
 Bachelor's Thesis Project - Leuphana University of Lüneburg
-Supervisor: Debayan Banerjee
+Supervisor Ⅰ: Dr.Debayan Banerjee
+Supervisor Ⅱ:  Soham Majumder  
