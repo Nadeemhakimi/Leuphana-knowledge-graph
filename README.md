@@ -363,9 +363,8 @@ python visualization/server.py
 
 Academic use - Bachelor's Thesis Project
 
-## Author
+## Author: Nadeem Hakimi
 
-Nadeem Hakimi
 
 
 Bachelor's Thesis Project - Leuphana University of Lüneburg
